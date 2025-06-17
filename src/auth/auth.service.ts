@@ -6,6 +6,7 @@ import * as bcrypt from 'bcryptjs';
 import { User, UserRole } from './entities/user.entity';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -85,10 +86,7 @@ export class AuthService {
 
   async getAllUsers(): Promise<Partial<User>[]> {
     const users = await this.userRepository.find();
-    return users.map(user => {
-      const { password, ...userWithoutPassword } = user;
-      return userWithoutPassword;
-    });
+      return users;
   }
 
   async updateUserStatus(id: number, isActive: boolean): Promise<Partial<User>> {
