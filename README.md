@@ -1,6 +1,6 @@
 # Expense Tracker (NestJS)
 
-A full-stack Expense Tracker API built with **NestJS**, **TypeORM**, and **MySQL/PostgreSQL**, supporting role-based access control for **Admin** and **User**. Users can manage expenses, budgets, and generate reports, while Admins can oversee all data.
+A Expense Tracker API built with **NestJS**, **TypeORM**, and **MySQL**, supporting role-based access control for **Admin** and **User**. Users can manage expenses, budgets, and generate reports, while Admins can oversee all data.
 
 ---
 
