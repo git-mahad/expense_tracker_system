@@ -1,55 +1,26 @@
-# 🛡️ Role-Based Task Management System (NestJS + SQL)
+# Expense Tracker (NestJS)
 
-A robust backend API for managing tasks with **user authentication**, **role-based access control (RBAC)**, and **secure JWT-based login**, built using **NestJS** and **SQL** (MySQL/PostgreSQL) via **TypeORM**.
-
----
-
-## 📚 Features
-
-- 🔐 User registration & login with JWT
-- 👥 Role-based access (Admin / User)
-- ✅ Permission-based route protection
-- 📝 CRUD operations for tasks
-- 🧩 Modular architecture with NestJS best practices
-- 📦 TypeORM for database interaction
-- 🛠️ Configurable with environment variables
+A full-stack Expense Tracker API built with **NestJS**, **TypeORM**, and **MySQL/PostgreSQL**, supporting role-based access control for **Admin** and **User**. Users can manage expenses, budgets, and generate reports, while Admins can oversee all data.
 
 ---
 
-## 🧾 Tech Stack
+## Features
 
-- **Backend**: NestJS, TypeORM
-- **Authentication**: JWT, Passport
-- **Database**: MySQL / PostgreSQL
-- **Validation**: class-validator
+### Authentication
+- Register & login using JWT
+- Role-based access control (Admin, User)
+
+### User
+- Create/edit/delete personal expenses
+- Set monthly budgets
+- View budget alerts
+- Download reports (CSV, PDF)
+
+### Admin
+- View/manage all users
+- View all expenses & budgets
+- Generate global reports
 
 ---
 
-## 🚀 Getting Started
-
-### 1. Clone the Repo
-
-```bash
-git clone https://github.com/your-username/task-management-rbac.git
-cd RBAC-task-management-system
-```
-### 2. Install Dependencies
-``` bash
-npm install
-```
-### 3. Create .env file
-``` bash
-PORT=3000
-DB_HOST=localhost
-DB_PORT=3306
-DB_USERNAME=root
-DB_PASSWORD=yourpassword
-DB_DATABASE=task_management
-JWT_SECRET=your_jwt_secret
-```
-### 4. Start the server 
-``` bash
-npm run start:dev
-```
-### 5. Feel free to Connect
-- [Mahad](https://linkedin.com/in/mahad-dev)
+# In Progress
