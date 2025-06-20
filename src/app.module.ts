@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { User } from './auth/entities/user.entity';
 import { ExpenseEntity as Expense } from './expense/entities/expense.entity';
+import { ExpenseModule } from './expense/expense.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ExpenseEntity as Expense } from './expense/entities/expense.entity';
     }),
     TypeOrmModule.forFeature([User]),
     AuthModule,
+    ExpenseModule
   ],
   controllers: [AppController],
   providers: [AppService],

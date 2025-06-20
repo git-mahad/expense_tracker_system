@@ -1,23 +1,11 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { User } from "src/auth/entities/user.entity";
+import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
 
-@Entity()
-export class ExpenseEntity {
-  @PrimaryGeneratedColumn()
-  id: string;
-
-  @Column({ length: 40 })
+export class ExpenseCreateDto {
+  @IsString()
+  @IsNotEmpty()
   title: string;
 
-  @Column()
+  @IsNumber()
+  @IsNotEmpty()
   amount: number;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @ManyToOne(() => User, user => user.expenses)
-  user: User;
 }

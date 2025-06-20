@@ -4,7 +4,7 @@ import { User } from "src/auth/entities/user.entity";
 @Entity()
 export class ExpenseEntity {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column({ length: 40 })
   title: string;
