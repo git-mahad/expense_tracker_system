@@ -7,6 +7,8 @@ import { AuthModule } from './auth/auth.module';
 import { User } from './auth/entities/user.entity';
 import { ExpenseEntity as Expense } from './expense/entities/expense.entity';
 import { ExpenseModule } from './expense/expense.module';
+import { BudgetModule } from './budget/budget.module';
+import { Budget } from './budget/entities/budget.entity';
 
 @Module({
   imports: [
@@ -21,13 +23,14 @@ import { ExpenseModule } from './expense/expense.module';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_NAME'),
-        entities: [User, Expense],
+        entities: [User, Expense, Budget],
         synchronize: true,
       }),
     }),
     TypeOrmModule.forFeature([User]),
     AuthModule,
-    ExpenseModule
+    ExpenseModule,
+    BudgetModule
   ],
   controllers: [AppController],
   providers: [AppService],
