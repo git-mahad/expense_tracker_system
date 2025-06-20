@@ -22,9 +22,9 @@ import { UpdateUserStatusDto } from './dto/Update.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
-  // ==========================================================
-  // =============== USER FUNCTIONALITIES =====================
-  // ==========================================================
+  // =================================
+  // =============== USER FUNCTIONALITIES ===============
+  // =======================================================
 
   @Post('register')
   async registerUser(@Body() registerDto: RegisterDto) {
@@ -43,9 +43,9 @@ export class AuthController {
     return userWithoutPassword;
   }
 
-  // ==========================================================
-  // =============== ADMIN FUNCTIONALITIES ====================
-  // ==========================================================
+  // ==============================================
+  // ============== ADMIN FUNCTIONALITIES =================
+  // ===========================================
 
   @Post('register-admin')
   // @UseGuards(JwtAuthGuard, RolesGuard)

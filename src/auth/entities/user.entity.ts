@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { ExpenseEntity } from 'src/expense/entities/expense.entity';
+import { Budget } from 'src/budget/entities/budget.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -35,4 +36,7 @@ export class User {
 
   @OneToMany(()=> ExpenseEntity, expense =>expense.user)
     expenses: ExpenseEntity[]
+
+  @OneToMany(() => Budget, budget => budget.user)
+  budgets: Budget[]
 }
