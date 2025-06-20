@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { User } from './auth/entities/user.entity';
+import { ExpenseEntity as Expense } from './expense/entities/expense.entity';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { User } from './auth/entities/user.entity';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_NAME'),
-        entities: [User],
+        entities: [User, Expense],
         synchronize: true,
       }),
     }),

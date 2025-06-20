@@ -1,3 +1,1 @@
-export class ExpenseController{
-  // constructor(private )
-}
+export class ExpenseController{}

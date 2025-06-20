@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { UserEntity } from "src/user/entities/user.entity"; // Adjust the import path as necessary
+import { User } from "src/auth/entities/user.entity";
 
 @Entity()
 export class ExpenseEntity {
@@ -18,6 +18,6 @@ export class ExpenseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => UserEntity, user => user.expenses)
-  user: UserEntity;
+  @ManyToOne(() => User, user => user.expenses)
+  user: User;
 }

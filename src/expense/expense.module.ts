@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
-import { AuthModule } from "src/auth/auth.module";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
-  imports: [AuthModule],
+  imports: [TypeOrmModule.forFeature([ExpenseModule])],
   providers: [],
-  controllers: [ExpenseModule]
+  controllers: [],
 })
 
 export class ExpenseModule{}

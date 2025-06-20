@@ -15,8 +15,37 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(registerDto: RegisterDto): Promise<{ user: Partial<User>; token: string }> {
-    const { email, password, name, role } = registerDto;
+  // ==========================================================
+  // =============== COMMON FUNCTIONALITIES ===================
+  // ==========================================================
+
+  private generateToken(user: User): string {
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    };
+    return this.jwtService.sign(payload);
+  }
+
+  async findById(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
+  }
+
+  async validateUser(payload: any): Promise<User> {
+    return this.findById(payload.sub);
+  }
+
+  // ==========================================================
+  // =============== USER FUNCTIONALITIES =====================
+  // ==========================================================
+
+  async registerUser(registerDto: RegisterDto): Promise<{ user: Partial<User>; token: string }> {
+    const { email, password, name } = registerDto;
     const existingUser = await this.userRepository.findOne({ where: { email } });
     if (existingUser) {
       throw new ConflictException('User with this email already exists');
@@ -27,7 +56,7 @@ export class AuthService {
       email,
       name,
       password: hashedPassword,
-      role: role || UserRole.USER,
+      role: UserRole.USER,
     });
 
     const savedUser = await this.userRepository.save(user);
@@ -62,38 +91,71 @@ export class AuthService {
     };
   }
 
-  async findById(id: number): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id } });
-    if (!user) {
-      throw new NotFoundException('User not found');
+  // ==========================================================
+  // =============== ADMIN FUNCTIONALITIES ====================
+  // ==========================================================
+
+  async registerAdmin(registerDto: RegisterDto): Promise<{ user: Partial<User>; token: string }> {
+    const { email, password, name } = registerDto;
+    const existingUser = await this.userRepository.findOne({ where: { email } });
+    if (existingUser) {
+      throw new ConflictException('Admin with this email already exists');
     }
-    return user;
-  }
 
-  async validateUser(payload: any): Promise<User> {
-    const user = await this.findById(payload.sub);
-    return user;
-  }
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const admin = this.userRepository.create({
+      email,
+      name,
+      password: hashedPassword,
+      role: UserRole.ADMIN,
+    });
 
-  private generateToken(user: User): string {
-    const payload = {
-      sub: user.id,
-      email: user.email,
-      role: user.role,
+    const savedAdmin = await this.userRepository.save(admin);
+    const token = this.generateToken(savedAdmin);
+    const { password: _, ...adminWithoutPassword } = savedAdmin;
+
+    return {
+      user: adminWithoutPassword,
+      token,
     };
-    return this.jwtService.sign(payload);
   }
+
+  async loginAdmin(loginDto: LoginDto): Promise<{ user: Partial<User>; token: string }> {
+    const { email, password } = loginDto;
+  
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (!user || user.role !== UserRole.ADMIN) {
+      throw new UnauthorizedException('Invalid admin credentials');
+    }
+  
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid admin credentials');
+    }
+  
+    const token = this.generateToken(user);
+    const { password: _, ...adminWithoutPassword } = user;
+  
+    return {
+      user: adminWithoutPassword,
+      token,
+    };
+  }
+  
 
   async getAllUsers(): Promise<Partial<User>[]> {
     const users = await this.userRepository.find();
-      return users;
+    return users.map(({ password, ...rest }) => rest);
   }
 
   async updateUserStatus(id: number, isActive: boolean): Promise<Partial<User>> {
-    const user = await this.findById(id);
+    const user = await this.findById(id); // assume this throws if user not found
+    user.isActive = isActive;
+  
     const updatedUser = await this.userRepository.save(user);
-    
+  
     const { password, ...userWithoutPassword } = updatedUser;
     return userWithoutPassword;
   }
+  
 }

@@ -1,15 +1,11 @@
-import { IsNotEmpty, IsString } from "class-validator";
-import { PrimaryGeneratedColumn } from "typeorm";
+import { IsOptional, IsString, IsNumber } from 'class-validator';
 
-export class UpdateExpenseDto{
-  @PrimaryGeneratedColumn()
-  id: string
-  
+export class UpdateExpenseDto {
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  title?: string
+  title?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  amount?: number
+  @IsOptional()
+  @IsNumber()
+  amount?: number;
 }
