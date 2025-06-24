@@ -15,9 +15,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  // ==========================================================
-  // =============== COMMON FUNCTIONALITIES ===================
-  // ==========================================================
+// common funcationalities
 
   private generateToken(user: User): string {
     const payload = {
@@ -40,9 +38,7 @@ export class AuthService {
     return this.findById(payload.sub);
   }
 
-  // ==========================================================
-  // =============== USER FUNCTIONALITIES =====================
-  // ==========================================================
+// user functionalities
 
   async registerUser(registerDto: RegisterDto): Promise<{ user: Partial<User>; token: string }> {
     const { email, password, name } = registerDto;
@@ -91,9 +87,7 @@ export class AuthService {
     };
   }
 
-  // ==========================================================
-  // =============== ADMIN FUNCTIONALITIES ====================
-  // ==========================================================
+  // admin functionalities
 
   async registerAdmin(registerDto: RegisterDto): Promise<{ user: Partial<User>; token: string }> {
     const { email, password, name } = registerDto;
@@ -149,7 +143,7 @@ export class AuthService {
   }
 
   async updateUserStatus(id: number, isActive: boolean): Promise<Partial<User>> {
-    const user = await this.findById(id); // assume this throws if user not found
+    const user = await this.findById(id);
     user.isActive = isActive;
   
     const updatedUser = await this.userRepository.save(user);

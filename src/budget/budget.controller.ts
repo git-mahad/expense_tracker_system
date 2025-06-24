@@ -34,27 +34,9 @@ export class BudgetController {
     return this.budgetService.getBudgetReport(req.user.id);
   }
 
-  @Get('export') // not working 
-  async export(@Request() req) {
-    return this.budgetService.exportBudgetsToCSV(req.user.id);
-  }
 
-  @Post('import') // not working 
-  async import(@Body() body: { csv: string }, @Request() req) {
-    return this.budgetService.importBudgetsFromCSV(body.csv, req.user);
-  }
-
-  // ============================
-  // ADMIN ROUTES
-  // ============================
+  // admin route
  
-  @Get('admin/all') // not working
-  @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN)
-  async getAll() {
-    return this.budgetService.getAllBudgets();
-  }
-
   @Get('admin/user/:userId')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)

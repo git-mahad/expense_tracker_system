@@ -18,7 +18,7 @@ export class ExpenseService {
   ) {}
 
   // =====================================
-  // ✅ USER METHODS
+  // USER METHODS
   // =====================================
 
   async createExpense(dto: ExpenseCreateDto, user: User): Promise<ExpenseEntity> {
@@ -56,8 +56,8 @@ export class ExpenseService {
     return { message: 'Expense deleted successfully' };
   }
 
-  // =====================================
-  // ✅ ADMIN METHODS
+  // ==================================
+  // ADMIN METHODS
   // =====================================
 
   private isAdmin(user: User): boolean {

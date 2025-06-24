@@ -21,11 +21,9 @@ import { UserRole } from 'src/auth/entities/user.entity';
 @Controller('expenses')
 @UseGuards(JwtAuthGuard)
 export class ExpenseController {
-  constructor(private readonly expenseService: ExpenseService) {}
+  constructor(private readonly expenseService: ExpenseService) { }
 
-  // ========================================
-  // ✅ USER ROUTES
-  // ========================================
+  // USER ROUTES
 
   @Post()
   async createExpense(@Body() dto: ExpenseCreateDto, @Request() req) {
@@ -62,7 +60,6 @@ export class ExpenseController {
     return this.expenseService.deleteExpense(id, req.user.id);
   }
 
-  // ========================================
   // ADMIN ROUTES
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
