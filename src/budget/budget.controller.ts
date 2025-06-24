@@ -34,9 +34,8 @@ export class BudgetController {
     return this.budgetService.getBudgetReport(req.user.id);
   }
 
-
   // admin route
- 
+
   @Get('admin/user/:userId')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)

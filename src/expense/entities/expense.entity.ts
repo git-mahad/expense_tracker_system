@@ -1,5 +1,12 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { User } from "src/auth/entities/user.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { User } from 'src/auth/entities/user.entity';
 
 @Entity()
 export class ExpenseEntity {
@@ -18,6 +25,6 @@ export class ExpenseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, user => user.expenses)
+  @ManyToOne(() => User, (user) => user.expenses)
   user: User;
 }

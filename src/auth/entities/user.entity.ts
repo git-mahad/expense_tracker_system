@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { ExpenseEntity } from 'src/expense/entities/expense.entity';
 import { Budget } from 'src/budget/entities/budget.entity';
@@ -26,17 +26,16 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-
   @Column({
     type: 'enum',
     enum: UserRole,
-    default: UserRole.USER
+    default: UserRole.USER,
   })
-  role: UserRole
+  role: UserRole;
 
-  @OneToMany(()=> ExpenseEntity, expense =>expense.user)
-    expenses: ExpenseEntity[]
+  @OneToMany(() => ExpenseEntity, (expense) => expense.user)
+  expenses: ExpenseEntity[];
 
-  @OneToMany(() => Budget, budget => budget.user)
-  budgets: Budget[]
+  @OneToMany(() => Budget, (budget) => budget.user)
+  budgets: Budget[];
 }

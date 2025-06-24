@@ -1,20 +1,26 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength, IsOptional, IsEnum, isNotEmpty } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+  IsOptional,
+  IsEnum,
+} from 'class-validator';
 import { UserRole } from '../entities/user.entity';
 
-export class RegisterDto{
-
+export class RegisterDto {
   @IsNotEmpty()
-  name: string
+  name: string;
 
   @IsNotEmpty()
   @IsEmail()
-  email: string
-  
+  email: string;
+
   @IsString()
-  @MinLength(3, {message: 'length must be > 3'})
-  password: string
+  @MinLength(3, { message: 'length must be > 3' })
+  password: string;
 
   @IsOptional()
   @IsEnum(UserRole)
-  role?:UserRole
+  role?: UserRole;
 }

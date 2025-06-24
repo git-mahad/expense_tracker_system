@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException, ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
@@ -15,7 +20,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-// common funcationalities
+  // common funcationalities
 
   private generateToken(user: User): string {
     const payload = {
@@ -38,11 +43,15 @@ export class AuthService {
     return this.findById(payload.sub);
   }
 
-// user functionalities
+  // user functionalities
 
-  async registerUser(registerDto: RegisterDto): Promise<{ user: Partial<User>; token: string }> {
+  async registerUser(
+    registerDto: RegisterDto,
+  ): Promise<{ user: Partial<User>; token: string }> {
     const { email, password, name } = registerDto;
-    const existingUser = await this.userRepository.findOne({ where: { email } });
+    const existingUser = await this.userRepository.findOne({
+      where: { email },
+    });
     if (existingUser) {
       throw new ConflictException('User with this email already exists');
     }
@@ -65,7 +74,9 @@ export class AuthService {
     };
   }
 
-  async login(loginDto: LoginDto): Promise<{ user: Partial<User>; token: string }> {
+  async login(
+    loginDto: LoginDto,
+  ): Promise<{ user: Partial<User>; token: string }> {
     const { email, password } = loginDto;
 
     const user = await this.userRepository.findOne({ where: { email } });
@@ -89,9 +100,13 @@ export class AuthService {
 
   // admin functionalities
 
-  async registerAdmin(registerDto: RegisterDto): Promise<{ user: Partial<User>; token: string }> {
+  async registerAdmin(
+    registerDto: RegisterDto,
+  ): Promise<{ user: Partial<User>; token: string }> {
     const { email, password, name } = registerDto;
-    const existingUser = await this.userRepository.findOne({ where: { email } });
+    const existingUser = await this.userRepository.findOne({
+      where: { email },
+    });
     if (existingUser) {
       throw new ConflictException('Admin with this email already exists');
     }
@@ -114,42 +129,45 @@ export class AuthService {
     };
   }
 
-  async loginAdmin(loginDto: LoginDto): Promise<{ user: Partial<User>; token: string }> {
+  async loginAdmin(
+    loginDto: LoginDto,
+  ): Promise<{ user: Partial<User>; token: string }> {
     const { email, password } = loginDto;
-  
+
     const user = await this.userRepository.findOne({ where: { email } });
     if (!user || user.role !== UserRole.ADMIN) {
       throw new UnauthorizedException('Invalid admin credentials');
     }
-  
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid admin credentials');
     }
-  
+
     const token = this.generateToken(user);
     const { password: _, ...adminWithoutPassword } = user;
-  
+
     return {
       user: adminWithoutPassword,
       token,
     };
   }
-  
 
   async getAllUsers(): Promise<Partial<User>[]> {
     const users = await this.userRepository.find();
     return users.map(({ password, ...rest }) => rest);
   }
 
-  async updateUserStatus(id: number, isActive: boolean): Promise<Partial<User>> {
+  async updateUserStatus(
+    id: number,
+    isActive: boolean,
+  ): Promise<Partial<User>> {
     const user = await this.findById(id);
     user.isActive = isActive;
-  
+
     const updatedUser = await this.userRepository.save(user);
-  
+
     const { password, ...userWithoutPassword } = updatedUser;
     return userWithoutPassword;
   }
-  
 }

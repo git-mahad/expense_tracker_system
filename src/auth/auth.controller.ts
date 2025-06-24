@@ -20,9 +20,9 @@ import { UpdateUserStatusDto } from './dto/Update.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
-// user functionality 
+  // user functionality
 
   @Post('register')
   async registerUser(@Body() registerDto: RegisterDto) {
@@ -41,7 +41,7 @@ export class AuthController {
     return userWithoutPassword;
   }
 
-// admin functionality
+  // admin functionality
 
   @Post('register-admin')
   // @UseGuards(JwtAuthGuard, RolesGuard)
@@ -73,5 +73,4 @@ export class AuthController {
     const { isActive } = updateUserStatusDto;
     return this.authService.updateUserStatus(+id, isActive);
   }
-
 }

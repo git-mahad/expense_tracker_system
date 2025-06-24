@@ -30,7 +30,7 @@ import { Budget } from './budget/entities/budget.entity';
     TypeOrmModule.forFeature([User]),
     AuthModule,
     ExpenseModule,
-    BudgetModule
+    BudgetModule,
   ],
   controllers: [AppController],
   providers: [AppService],

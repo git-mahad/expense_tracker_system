@@ -10,6 +10,16 @@ import { ExpenseCreateDto } from './dto/expense.create.dto';
 import { UpdateExpenseDto } from './dto/expense.update.dto';
 import { User, UserRole } from 'src/auth/entities/user.entity';
 
+export interface UserExpenseSummary {
+  userId: number;
+  total: number;
+}
+
+export interface MonthlyExpenseSummary {
+  month: string;
+  total: number;
+}
+
 @Injectable()
 export class ExpenseService {
   constructor(
@@ -17,11 +27,12 @@ export class ExpenseService {
     private expenseRepository: Repository<ExpenseEntity>,
   ) {}
 
-  // =====================================
-  // USER METHODS
-  // =====================================
+// user methods
 
-  async createExpense(dto: ExpenseCreateDto, user: User): Promise<ExpenseEntity> {
+  async createExpense(
+    dto: ExpenseCreateDto,
+    user: User,
+  ): Promise<ExpenseEntity> {
     const expense = this.expenseRepository.create({
       ...dto,
       user,
@@ -44,13 +55,20 @@ export class ExpenseService {
     return expense;
   }
 
-  async updateExpense(id: number, dto: UpdateExpenseDto, userId: number): Promise<ExpenseEntity> {
+  async updateExpense(
+    id: number,
+    dto: UpdateExpenseDto,
+    userId: number,
+  ): Promise<ExpenseEntity> {
     const expense = await this.getExpenseById(id, userId);
     Object.assign(expense, dto);
     return await this.expenseRepository.save(expense);
   }
 
-  async deleteExpense(id: number, userId: number): Promise<{ message: string }> {
+  async deleteExpense(
+    id: number,
+    userId: number,
+  ): Promise<{ message: string }> {
     const expense = await this.getExpenseById(id, userId);
     await this.expenseRepository.remove(expense);
     return { message: 'Expense deleted successfully' };
@@ -75,7 +93,10 @@ export class ExpenseService {
     });
   }
 
-  async getExpensesByUserId(admin: User, userId: number): Promise<ExpenseEntity[]> {
+  async getExpensesByUserId(
+    admin: User,
+    userId: number,
+  ): Promise<ExpenseEntity[]> {
     if (!this.isAdmin(admin)) {
       throw new ForbiddenException('Access denied');
     }
@@ -86,7 +107,11 @@ export class ExpenseService {
     });
   }
 
-  async updateAnyExpense(admin: User, id: number, dto: UpdateExpenseDto): Promise<ExpenseEntity> {
+  async updateAnyExpense(
+    admin: User,
+    id: number,
+    dto: UpdateExpenseDto,
+  ): Promise<ExpenseEntity> {
     if (!this.isAdmin(admin)) {
       throw new ForbiddenException('Access denied');
     }
@@ -98,7 +123,10 @@ export class ExpenseService {
     return await this.expenseRepository.save(expense);
   }
 
-  async deleteAnyExpense(admin: User, id: number): Promise<{ message: string }> {
+  async deleteAnyExpense(
+    admin: User,
+    id: number,
+  ): Promise<{ message: string }> {
     if (!this.isAdmin(admin)) {
       throw new ForbiddenException('Access denied');
     }
@@ -110,7 +138,7 @@ export class ExpenseService {
     return { message: 'Expense deleted successfully' };
   }
 
-  async totalExpensesPerUser(admin: User): Promise<{ userId: number; total: number }[]> {
+  async totalExpensesPerUser(admin: User): Promise<UserExpenseSummary[]> {
     if (!this.isAdmin(admin)) {
       throw new ForbiddenException('Access denied');
     }
@@ -119,21 +147,23 @@ export class ExpenseService {
       SELECT "userId", SUM(amount) AS total
       FROM expense_entity
       GROUP BY "userId"
-    `);
+    `) as UserExpenseSummary[]
+
     return raw;
   }
 
-  async monthlySummaries(admin: User): Promise<any[]> {
+  async monthlySummaries(admin: User): Promise<MonthlyExpenseSummary[]> {
     if (!this.isAdmin(admin)) {
       throw new ForbiddenException('Access denied');
     }
 
     const raw = await this.expenseRepository.query(`
-      SELECT DATE_TRUNC('month', "createdAt") AS month, SUM(amount) AS total
+      SELECT DATE_FORMAT(createdAt, '%Y-%m') AS month, SUM(amount) AS total
       FROM expense_entity
       GROUP BY month
       ORDER BY month DESC
-    `);
+    `) as MonthlyExpenseSummary[];
+
     return raw;
   }
 }

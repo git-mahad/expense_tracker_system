@@ -17,11 +17,12 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { UserRole } from 'src/auth/entities/user.entity';
+import { UserExpenseSummary, MonthlyExpenseSummary } from './expense.service';
 
 @Controller('expenses')
 @UseGuards(JwtAuthGuard)
 export class ExpenseController {
-  constructor(private readonly expenseService: ExpenseService) { }
+  constructor(private readonly expenseService: ExpenseService) {}
 
   // USER ROUTES
 
@@ -36,10 +37,7 @@ export class ExpenseController {
   }
 
   @Get(':id')
-  async getExpenseById(
-    @Param('id', ParseIntPipe) id: number,
-    @Request() req,
-  ) {
+  async getExpenseById(@Param('id', ParseIntPipe) id: number, @Request() req) {
     return this.expenseService.getExpenseById(id, req.user.id);
   }
 
@@ -53,17 +51,13 @@ export class ExpenseController {
   }
 
   @Delete(':id')
-  async deleteExpense(
-    @Param('id', ParseIntPipe) id: number,
-    @Request() req,
-  ) {
+  async deleteExpense(@Param('id', ParseIntPipe) id: number, @Request() req) {
     return this.expenseService.deleteExpense(id, req.user.id);
   }
 
   // ADMIN ROUTES
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
-
   @Get('admin/all')
   async getAllExpenses(@Request() req) {
     return this.expenseService.getAllExpenses(req.user);
@@ -95,12 +89,12 @@ export class ExpenseController {
   }
 
   @Get('admin/stats/total')
-  async getTotalExpensesPerUser(@Request() req) {
+  async totalExpensesPerUser(@Request() req): Promise<UserExpenseSummary[]> {
     return this.expenseService.totalExpensesPerUser(req.user);
   }
 
   @Get('admin/stats/monthly')
-  async getMonthlySummaries(@Request() req) {
+  async monthlySummaries(@Request() req): Promise<MonthlyExpenseSummary[]> {
     return this.expenseService.monthlySummaries(req.user);
   }
 }

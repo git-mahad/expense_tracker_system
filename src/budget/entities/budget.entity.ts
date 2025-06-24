@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+} from 'typeorm';
 import { User } from 'src/auth/entities/user.entity';
 
 @Entity('budgets')
@@ -10,9 +16,9 @@ export class Budget {
   amount: number;
 
   @Column()
-  month: string; 
+  month: string;
 
-  @ManyToOne(() => User, user => user.budgets)
+  @ManyToOne(() => User, (user) => user.budgets)
   user: User;
 
   @CreateDateColumn()

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Budget } from './entities/budget.entity';
@@ -25,7 +25,7 @@ export class BudgetService {
 
   async getBudgetReport(userId: number): Promise<any> {
     const budgets = await this.getUserBudgets(userId);
-    return budgets.map(b => ({
+    return budgets.map((b) => ({
       month: b.month,
       amount: b.amount,
     }));
@@ -33,8 +33,11 @@ export class BudgetService {
 
   async exportBudgetsToCSV(userId: number): Promise<string> {
     const budgets = await this.getUserBudgets(userId);
-    const csv = budgets.map(b => `${b.month},${b.amount}`).join('\n');
-    const filePath = path.join(__dirname, `../../../exports/user-${userId}-budgets.csv`);
+    const csv = budgets.map((b) => `${b.month},${b.amount}`).join('\n');
+    const filePath = path.join(
+      __dirname,
+      `../../../exports/user-${userId}-budgets.csv`,
+    );
     fs.writeFileSync(filePath, csv);
     return filePath;
   }
@@ -55,5 +58,4 @@ export class BudgetService {
 
     return budgets;
   }
-
 }
