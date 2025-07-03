@@ -24,7 +24,7 @@ import { Budget } from './budget/entities/budget.entity';
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_NAME'),
         entities: [User, Expense, Budget],
-        synchronize: true,
+        synchronize: false,
       }),
     }),
     TypeOrmModule.forFeature([User]),
